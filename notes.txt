@@ -1,3 +1,10 @@
 refer video : https://www.youtube.com/watch?v=7wzuievFjrk
 
 in cmd : npm run deploy
+
+
+=====================
+
+mongo settings
+
+npm install mongodb
