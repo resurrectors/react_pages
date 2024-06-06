@@ -27,11 +27,11 @@ function DownloadJsonData({ data, filename }) {
 
     return (
 
-        <div className="row justify-content-end m-2">
-            <div className="col-2 text-center">
-                <button className="btn btn-primary" onClick={downloadJSON}>Save data</button>
-            </div>
+
+        <div>
+            <button className="btn btn-primary" onClick={downloadJSON}>Save data</button>
         </div>
+
     );
 }
 
