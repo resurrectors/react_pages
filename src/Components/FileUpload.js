@@ -1,32 +1,33 @@
-import { useState } from "react";
-import DownloadJsonData from "../MultiPurpose/DownloadJsonData";
+// import { useState } from "react";
 
-function CustomFileUpload() {
+function CustomFileUpload(props) {
 
-    const [data, setData] = useState([])
+
 
     const handleSubmit = e => {
         e.preventDefault();
-        // console.log("inform");
+        // console.log(props.todos);
         // console.log(e);
         const fileReader = new FileReader();
         fileReader.readAsText(e.target[0].files[0], "UTF-8");
 
-        setData(
-            (prevState) => (
-                fileReader.onload = e => {
-                    let fileData = JSON.parse(e.target.result)
-                    return fileData
-                }
-            )
+        const fileData = () => (
+            fileReader.onload = e => {
+                let fileData = JSON.parse(e.target.result)
+                // console.log(fileData);
+                props.setTodos([...props.todos, ...fileData])
+            }
         )
-        console.log(data[0]);
-        console.log("done");
+        fileData()
+
+        // console.log("done");
     }
 
     return (
         <div>
-            <div><p style={{ "alignContent": "center", "textAlign": "center" }}>FileUploadComponent</p></div>
+            <div>
+                <p style={{ "alignContent": "center", "textAlign": "center" }}>FileUploadComponent</p>
+            </div>
             <div>
                 <form onSubmit={handleSubmit}>
                     <div className="row g-3 align-items-center align-content-center">
@@ -39,7 +40,7 @@ function CustomFileUpload() {
                     </div>
                 </form>
             </div>
-            <div>
+            {/* <div>
                 <table className="table table-striped">
                     <thead>
                         <tr>
@@ -55,7 +56,7 @@ function CustomFileUpload() {
                                     <tr key={item.id}>
                                         <th scope="row">{item.text}</th>
                                         <td>{item.completed ? "Completed" : "Incomplete"}</td>
-                                        {/* <td>{new Date(item.createdAt).getDate()}</td> */}
+                                         <td>{new Date(item.createdAt).getDate()}</td>
                                         <td>{item.createdAt}</td>
                                     </tr>
                             )
@@ -63,8 +64,8 @@ function CustomFileUpload() {
 
                     </tbody>
                 </table>
-            </div>
-            <DownloadJsonData data={data} filename="latestTodo.json" />
+            </div> */}
+            {/* <DownloadJsonData data={data} filename="latestTodo.json" /> */}
         </div>
     );
 }
