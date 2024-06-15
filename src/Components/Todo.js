@@ -63,10 +63,17 @@ function Todo() {
         ));
     };
 
-    const handleDelete = (id) => {
-        setTodos(todos.map(todo =>
-            todo.id === id ? { ...todo, de_active: !todo.de_active } : todo
-        ));
+    const handleDelete = (id, de_active) => {
+        if (de_active) {
+            const filteredTodos = todos.filter(todo => todo.id !== id)
+            setTodos(filteredTodos);
+            localStorage.setItem('todos', JSON.stringify(filteredTodos));
+        }
+        else {
+            setTodos(todos.map(todo =>
+                todo.id === id ? { ...todo, de_active: !todo.de_active } : todo
+            ));
+        }
     }
 
     const handleFilterChange = (newFilter) => {
@@ -101,7 +108,7 @@ function Todo() {
     // console.log(groupedTodos);
 
     return (
-        <div>
+        <div className="p-5">
             <h1 className="mb-4 text-center">Todo App</h1>
             <div className="row align-content-center justify-content-center">
                 <div style={{ "width": "700px" }}>
@@ -112,7 +119,7 @@ function Todo() {
                     </div>
                     <div className="row text-center" style={{ "justifyContent": "center", "alignContent": "center" }}>
                         <div className="col">
-                            <button className="btn btn-primary" type="button" onClick={handleAddTodo}>Add</button>
+                            <button className="btn btn-outline-secondary" type="button" onClick={handleAddTodo}>Add</button>
                         </div>
                         <div className="col">
                             <DownloadJsonData data={todos} />
@@ -121,7 +128,7 @@ function Todo() {
                             {/* <button className="btn btn-primary" type="button" onClick={() => { console.log("in file") }}>Upload File</button> */}
                             {/* <CustomFileUpload /> */}
                             {/* <!-- Button trigger modal --> */}
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                            <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal">
                                 File Upload
                             </button>
 
@@ -150,13 +157,14 @@ function Todo() {
             <div className="todo-container">
                 <div className="row align-content-center justify-content-center">
                     <div className="btn-group mb-3" role="group">
-                        <button type="button" className="btn btn-secondary" onClick={() => handleFilterChange('all')}>All</button>
-                        <button type="button" className="btn btn-secondary" onClick={() => handleFilterChange('done')}>Done</button>
-                        <button type="button" className="btn btn-secondary" onClick={() => handleFilterChange('pending')}>Pending</button>
-                        <button type="button" className="btn btn-secondary" onClick={() => handleFilterChange('deleted')}>Deleted</button>
+                        <button type="button" className={filter === "all" ? "btn btn-primary" : "btn btn-secondary"} onClick={() => handleFilterChange('all')}>All</button>
+                        <button type="button" className={filter === "done" ? "btn btn-primary" : "btn btn-secondary"} onClick={() => handleFilterChange('done')}>Done</button>
+                        <button type="button" className={filter === "pending" ? "btn btn-primary" : "btn btn-secondary"} onClick={() => handleFilterChange('pending')}>Pending</button>
+                        <button type="button" className={filter === "deleted" ? "btn btn-primary" : "btn btn-secondary"} onClick={() => handleFilterChange('deleted')}>Deleted</button>
                     </div>
                 </div>
-                <div style={{ "border": "3px solid #73AD21" }}>
+                {/* <div style={{ "border": "3px solid #73AD21" }}> */}
+                <div>
                     {Object.entries(groupedTodos).map(([date, todos]) => (
                         <div key={date}>
                             <h4 className="mt-3">{date}</h4>
@@ -164,8 +172,8 @@ function Todo() {
                                 <thead>
                                     <tr>
                                         <th scope="col">Status</th>
-                                        <th style={{ "width": "1000px" }} scope="col">Details</th>
-                                        <th scope="col">Actions</th>
+                                        <th style={{ "width": "75%" }} scope="col">Details</th>
+                                        <th style={{ "padding": "10px" }} scope="col">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -187,7 +195,7 @@ function Todo() {
                                                 </div>
                                             </td>
                                             <td>
-                                                <div className="row align-items-center justify-content-center">
+                                                <div className="row align-items-center justify-content-center p-2">
                                                     <div className="col-6 align-items-center">
                                                         <button type="button" class="btn" data-bs-toggle="modal" data-bs-target={`#exampleModal-${todo.id}`}>
                                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-pencil-square" viewBox="0 0 16 16">
@@ -201,26 +209,52 @@ function Todo() {
                                                                 <div class="modal-content">
                                                                     <div class="modal-header">
                                                                         <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
-                                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                                     </div>
                                                                     <div class="modal-body">
                                                                         <input type="text" className="form-control" value={editValue ? editValue : todo.text} onChange={handleEditChange} />
                                                                     </div>
                                                                     <div class="modal-footer">
-                                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onClick={() => setEditValue("")}>Close</button>
                                                                         <button type="button" class="btn btn-primary" onClick={() => saveEditChange(todo.id)}>Save changes</button>
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div className="col-6" onClick={() => handleDelete(todo.id)}>
-                                                        <button type="button" class="btn">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-trash" viewBox="0 0 16 16">
-                                                                <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z" />
-                                                                <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z" />
-                                                            </svg>
-                                                        </button>
+                                                    <div className="col-6">
+                                                        {
+                                                            todo.de_active ?
+                                                                <div>
+                                                                    <button type="button" class="btn" data-bs-toggle="modal" data-bs-target={`#exampleModalDelete-${todo.id}`}>
+                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-trash" viewBox="0 0 16 16">
+                                                                            <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z" />
+                                                                            <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z" />
+                                                                        </svg>
+                                                                    </button>
+                                                                    <div class="modal fade" id={`exampleModalDelete-${todo.id}`} tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                                        <div class="modal-dialog">
+                                                                            <div class="modal-content">
+                                                                                <div class="modal-header">
+                                                                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Delete Permanently</h1>
+                                                                                </div>
+                                                                                <div class="modal-footer">
+                                                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                                                    <button type="button" class="btn btn-primary" onClick={() => handleDelete(todo.id, todo.de_active)} data-bs-dismiss="modal">Delete</button>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                :
+                                                                <button type="button" class="btn" onClick={() => handleDelete(todo.id, todo.de_active)}>
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-trash" viewBox="0 0 16 16">
+                                                                        <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z" />
+                                                                        <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z" />
+                                                                    </svg>
+                                                                </button>
+                                                        }
+
+
                                                     </div>
                                                 </div>
                                             </td>

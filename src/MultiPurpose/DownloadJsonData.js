@@ -29,7 +29,7 @@ function DownloadJsonData({ data, filename }) {
 
 
         <div>
-            <button className="btn btn-primary" onClick={downloadJSON}>Save data</button>
+            <button className="btn btn-outline-secondary" onClick={downloadJSON}>Save data</button>
         </div>
 
     );
