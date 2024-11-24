@@ -1,7 +1,10 @@
 import Todo from '../Components/Todo';
 import Navbar from '../Components/Navbar';
-function TodoTrackerHome() {
+import { useLocation } from 'react-router-dom';
 
+function TodoTrackerHome() {
+    const location = useLocation();
+    console.log(location);
     return (
         <div>
             <Navbar />

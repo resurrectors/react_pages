@@ -9,9 +9,9 @@ function App() {
 
   return (
     <Routes>
-      <Route path="/" element={< Home />} />
-      <Route path="/todo" element={<TodoTrackerHome />} />
-      <Route path="/expense" element={<ExpenseHome />} />
+      <Route path="/react_pages" element={< Home />} />
+      <Route path="/react_pages/todo" element={<TodoTrackerHome />} />
+      <Route path="/react_pages/expense" element={<ExpenseHome />} />
     </Routes>
   );
 }

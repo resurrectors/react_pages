@@ -14,7 +14,7 @@ function Home() {
                         <div className="card-body">
                             <h5 className="card-title">To-Do App</h5>
                             <p className="card-text">Manage your tasks effectively with our To-Do App.</p>
-                            <Link to="/todo" className="btn btn-primary">Go to To-Do App</Link>
+                            <Link to="/react_pages/todo" className="btn btn-primary">Go to To-Do App</Link>
                         </div>
                     </div>
                 </div>
@@ -26,7 +26,7 @@ function Home() {
                         <div className="card-body">
                             <h5 className="card-title">Expense Tracker</h5>
                             <p className="card-text">Keep track of your expenses with our Expense Tracker.</p>
-                            <Link to="/expense" className="btn btn-primary">Go to Expense Tracker</Link>
+                            <Link to="/react_pages/expense" className="btn btn-primary">Go to Expense Tracker</Link>
                         </div>
                     </div>
                 </div>
