@@ -182,7 +182,7 @@ function ExpenseHome() {
                         </tr>
                     </thead>
                     <tbody>
-                        {expenseData.SpentHistory.map((item) => (
+                        {expenseData?.SpentHistory?.map((item) => (
                             <tr>
                                 <td>{item.text}</td>
                                 <td>{item.value}</td>
